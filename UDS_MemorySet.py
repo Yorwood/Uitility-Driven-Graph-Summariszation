@@ -4,6 +4,8 @@ from cuckoopy import CuckooFilter as CF
 
 # 测试图，此处可以根据自己的需要生成原图
 G =  nx.Graph()
+#G.add_nodes_from([1,2,3,4])
+#G.add_edges_from([(1,4),(2,4),(3,4),(1,2),(1,3),(2,3)])
 #G.add_nodes_from([1,2,3,4,5,6,7,8])
 #G.add_edges_from([(1,4),(2,4),(3,4),(4,5),(4,6),(4,7),(4,8),(5,6),(7,8)])
 G.add_nodes_from([1,2,3,4,5,6,7,8,9,10])
@@ -218,7 +220,7 @@ def connectSuperEdge_Loop(S_uv,S_u,S_v,dic_cost,totalSE):
             seCost_u_u = 0
             nseCost_u_u = tup[2] - tup[1]
     else:
-        seCost_u_u = len(S_u) * len(S_u) / totalSE
+        seCost_u_u = ( len(S_u) -1 ) * len(S_u) /2 /totalSE  # 这里规则2形成的是团，应该是n*(n-1)/2条边
         nseCost_u_u = 0
 
     if (tup2 != None ):
@@ -229,7 +231,7 @@ def connectSuperEdge_Loop(S_uv,S_u,S_v,dic_cost,totalSE):
             seCost_v_v = 0
             nseCost_v_v = tup2[2] - tup2[1]
     else:
-        seCost_v_v = len(S_v) * len(S_v) / totalSE
+        seCost_v_v = ( len(S_v) -1 ) * len(S_v) /2 / totalSE
         nseCost_v_v = 0
 
     if (tup3 != None ):
@@ -383,7 +385,7 @@ def UDS_MemorySet(T,G):
     E_graph_list = G.edges() # 求出原图中的边list备用，以免重复计算
     E_graph_size = G.size() # 原图边数
     V_graph_size = G.number_of_nodes() # 原图顶点数
-    totalSE = V_graph_size*(V_graph_size -1 )/2 - E_graph_size # 最多可引入的干扰边数
+    totalSE = V_graph_size*(V_graph_size -1 )/2  + V_graph_size - E_graph_size # 最多可引入的干扰边数，已经考虑自环
 
     utility = 1
 
